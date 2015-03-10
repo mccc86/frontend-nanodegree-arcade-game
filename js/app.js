@@ -6,8 +6,10 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-	this.location = 0;
+	this.x = 100;
+	this.y = 300;
 	this.speed = 0;
+	
 }
 
 
@@ -28,31 +30,44 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 
 var Player = function(){
-	this.sprite = 'images/char-pink-girl.png';
-	this.location = 0;
+	this.sprite = "images/char-boy.png";
+	this.x = 150;
+	this.y = 350;
 }
 // This class requires an update(), render() and
 // a handleInput() method.
 Player.prototype.update = function(dt){
-	
+    
 }
+
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 Player.prototype.handleInput = function(allowedKeys){
-	
+	var k = new Kibo();
+	k.down(['up', 'down'], function() {
+	  console.log('up or down arrow key pressed');
+	}).up('tab', function() {
+	  console.log('TAB key released');
+	});
 }
 
 Player.prototype.reset = function(){
 	
 }
+
+
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
 var len = 3;
-for(var i = 0; i < len; i++){
-	allEnemies.push();
+for(var i = 0; i < len; i++) {
+	var e = new Enemy();
+	e.x = i * 100;
+	e.y = i * 100;
+	allEnemies.push(e);
 }
 
 // Place the player object in a variable called player
