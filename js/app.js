@@ -1,3 +1,7 @@
+ctx.font = "bold 30px sans-serif";
+ctx.textAlign = "center";
+ctx.fillText("Frogger Game", canvas.width / 2, 40);
+
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -7,8 +11,6 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-
-    	console.log(ctx);
 }
 
 
@@ -20,16 +22,16 @@ Enemy.prototype.update = function(dt) {
     // all computers.
 	//speed = 505 / dt;
 	//Math.random();
-	var randomNumber = Math.floor(Math.random() * 500);
-    this.x = this.x + randomNumber * dt; 
+	var randomNumber = Math.floor(Math.random() * 300);
+    this.x += randomNumber * dt; 
 	if(this.x >= 505){
 		this.x = 0;
     }
 	
 	
 	//Reset player to beginning position and collisions
-    if(player.x >= this.x - 40 && player.x <= this.x + 40 
-		&& player.y >= this.y - 40 && player.y <= this.y + 40){
+    if(player.x >= this.x - 50 && player.x <= this.x + 50 
+		&& player.y >= this.y - 50 && player.y <= this.y + 50){
                player.x = 200;
 			   player.y = 400;
            
@@ -79,23 +81,52 @@ Player.prototype.handleInput = function(allowedKeys){
 }
 
 
+var Gem = function() {
+	 this.sprite = 'images/gem-blue.png';
+	 this.x = Math.random() * 450;
+	 this.y = Math.random() * 390;
+	 
+}
 
+
+Gem.prototype.update = function() {
+    if(player.x >= this.x - 60 && player.x <= this.x + 60 
+		&& player.y >= this.y - 60 && player.y <= this.y + 60){
+	   	 this.x = Math.random() * 450;
+	   	 this.y = Math.random() * 390;   
+       }
+}
+
+Gem.prototype.render = function(){
+	 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
 
 
 // Now instantiate your objects.
 
 // Place the player object in a variable called player
 var player = new Player();
+//gem object
+var gem = new Gem();
 
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
 var len = 3;
 for(var i = 0; i < len; i++) {
 	var e = new Enemy();
-	e.x = (i + 1) * 100;
+	e.x = (i + 1) * 70;
 	e.y = (i + 1) * 70;
 	allEnemies.push(e);
 }
+
+/*var allGems = [];
+var len = 2;
+for(var i = 0; i < len; i++) {
+	var g = new Gem();
+	g.x = (i + 1) * 100;
+	g.y = (i + 1) * 70;
+	allGems.push(g);
+}*/
 
 
 // This listens for key presses and sends the keys to your
