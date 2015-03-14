@@ -3,30 +3,41 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// Enemies our player must avoid
+/** 
+* Enemies our player must avoid
+*/
 var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    /**
+	* Variables applied to each of our instances go here,
+    * we've provided one for you to get started
+    * The image/sprite for our enemies, this uses
+    * a helper we've provided to easily load images
+	*/
+	
     this.sprite = 'images/enemy-bug.png';
 	this.speed = Math.floor(Math.random() * 400);
 }
 
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+/**
+* Update the enemy's position, required method for game
+*Parameter: dt, a time delta between ticks
+* @param dt
+*/
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    /**
+	* You should multiply any movement by the dt parameter
+    * which will ensure the game runs at the same speed for
+    * all computers.
+	*/
     this.x += this.speed * dt; 
 	if(this.x >= 505){
 		this.x = 0;
     }
 	
-	//Reset player to beginning position and collisions
+	/**
+	* Reset player to beginning position and collisions
+	*/
     if(player.x >= this.x - 50 && player.x <= this.x + 50 
 		&& player.y >= this.y - 50 && player.y <= this.y + 50){
                player.x = 200;
@@ -35,46 +46,64 @@ Enemy.prototype.update = function(dt) {
        }
 }
 
-// Draw the enemy on the screen, required method for game
+/**
+* Draw the enemy on the screen, required method for game
+*/
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
 }
 
-// Now write your own player class
+/**
+* Now write your own player class
+*/
 
-var Player = function(){
+var Player = function() {
 	this.sprite = "images/char-boy.png";
 	this.x = 200;
 	this.y = 400;
 	
 }
-// This class requires an update(), render() and
-// a handleInput() method.
+/**
+* This class requires an update(), render() and
+* a handleInput() method.
+*/
 
-Player.prototype.update = function(dt){
+Player.prototype.update = function(dt) {
     
-	
 }
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-Player.prototype.handleInput = function(allowedKeys){
-
-	if(this.x >= 100  && allowedKeys == 'left'){
-	this.x -= 100;
+Player.prototype.handleInput = function(allowedKeys) {
 	
+	var Movement = {
+	    Direction: {
+	        LEFT: "left",
+	        RIGHT: "right",
+	        UP: "up",
+	        DOWN: "down"
+	    },
+	    Displacement: {
+	        alongX: 100,
+	        alongY: 83
+	    }
+	};
+	
+	if (this.y >=100 && allowedKeys === Movement.Direction.LEFT) {
+		this.x -= 100;
+	} 
+
+	if(this.y >= 100 && allowedKeys === Movement.Direction.UP){
+		this.y -= 81;
 	}
-	if(this.y >= 100 && allowedKeys == 'up'){
-	this.y -= 81;
+	if(this.x <= 350 && allowedKeys === Movement.Direction.RIGHT){
+		this.x += 100;
 	}
-	if(this.x <= 350 && allowedKeys == 'right'){
-	this.x += 100;
-	}
-	if(this.y <= 370 && allowedKeys == 'down'){
-	this.y += 81;
+	if(this.y <= 370 && allowedKeys === Movement.Direction.DOWN){
+		this.y += 81;
 	}
 }
 
@@ -84,7 +113,7 @@ var Gem = function() {
    	this.randomPosition();
 }
 
-Gem.prototype.randomPosition = function(){
+Gem.prototype.randomPosition = function() {
 
 	this.x = getRandomInt(1, 5) * 101;
 	this.y = getRandomInt(1, 4) * 73;  
@@ -92,48 +121,51 @@ Gem.prototype.randomPosition = function(){
 
 var gem_array = [];
 Gem.prototype.update = function() {
-	//checks collisions between Player and Gem
-	
+	/**
+	* checks collisions between Player and Gem
+	*/
 		
-    	if(player.x >= this.x - 80 && player.x <= this.x + 80 
-			&& player.y >= this.y - 80 && player.y <= this.y + 80){
+    	if(player.x >= this.x - 80 && player.x <= this.x + 80 && player.y >= this.y - 80 && player.y <= this.y + 80) {
 				
 				this.randomPosition();
 				if(gem_array.length <= 5){
 					gem_array.push(this.sprite);
 					for(var i = 0; i < gem_array.length; i++){
-							//ctx.fillText(gem_array[i], i * 30, 50);	
-							ctx.drawImage(Resources.get('images/gem-orange.png'), i * 33.33, 0);
+						ctx.drawImage(Resources.get('images/gem-orange.png'), i * 33.33, 0);
 							
 					}
-				}else{
+				} else{
 					ctx.clearRect ( 0 , 0, 200, 100);
 					gem_array = [];
 				
 				}
-				
-			
-		
        }   
 }
 
 
-Gem.prototype.render = function(){
+Gem.prototype.render = function() {
 	 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 
-// Now instantiate your objects.
+/**
+* Now instantiate your objects.
+*/
 
-// Place the player object in a variable called player
+/**
+* Place the player object in a variable called player
+*/
 var player = new Player();
-//gem object
+
+/** gem object */
 var gem = new Gem();
 
 
 
 
-// Place all enemy objects in an array called allEnemies
+/**
+* Place all enemy objects in an array called allEnemies
+*/
 var allEnemies = [];
 var len = 4;
 for(var i = 0; i < len; i++) {
@@ -143,18 +175,13 @@ for(var i = 0; i < len; i++) {
 	allEnemies.push(e);
 }
 
-/*var allGems = [];
-var len = 2;
-for(var i = 0; i < len; i++) {
-	var g = new Gem();
-	g.x = (i + 1) * 100;
-	g.y = (i + 1) * 70;
-	allGems.push(g);
-}*/
 
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+
+/**
+* This listens for key presses and sends the keys to your
+*Player.handleInput() method. You don't need to modify this.
+*/
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
