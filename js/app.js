@@ -1,7 +1,7 @@
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 
 /**
 * Enum to be used across code.
@@ -34,7 +34,7 @@ var Enemy = function() {
 	
     this.sprite = 'images/enemy-bug.png';
 	this.speed = Math.floor(Math.random() * 400);
-}
+};
 
 
 /**
@@ -62,7 +62,7 @@ Enemy.prototype.update = function(dt) {
 			   player.y = 400;
            
        }
-}
+};
 
 /**
 * Draw the enemy on the screen, required method for game
@@ -70,7 +70,7 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
-}
+};
 
 /**
 * Now write your own player class and set initial default position and sprite.
@@ -80,21 +80,21 @@ var Player = function() {
 	this.x = 200;
 	this.y = 400;
 	
-}
+};
 
 /**
 * Updates player resource.
 */
 Player.prototype.update = function(dt) {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 /**
 *this renders the Player.
 */
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 /**
 * This will make the Player move according to the pressed keys: up, down, right or left.
@@ -116,7 +116,7 @@ Player.prototype.handleInput = function(allowedKeys) {
 	if(this.y <= 370 && allowedKeys === Movement.Direction.DOWN) {
 		this.y += Movement.Displacement.alongY;
 	}
-}
+};
 
 /**
 * Draw the gem on the screen, required method for game
@@ -124,7 +124,7 @@ Player.prototype.handleInput = function(allowedKeys) {
 var Gem = function() {
 	this.sprite = 'images/gem-blue.png';
    	this.randomPosition();
-}
+};
 
 /**
 * this will display the position of the Gem randomly on the canvas
@@ -132,7 +132,7 @@ var Gem = function() {
 Gem.prototype.randomPosition = function() {
 	this.x = getRandomInt(1, 5) * 101;
 	this.y = getRandomInt(1, 4) * 73;  
-}
+};
 
 /**
 * Checks collisions between Player and Gem, draw the gems collected after the collision between the
@@ -155,14 +155,14 @@ Gem.prototype.update = function() {
 		
 		}
    }   
-}
+};
 
 /**
 * This renders the blue gem at x and y.
 */
 Gem.prototype.render = function() {
 	 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 
 /**
