@@ -3,6 +3,24 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+/**
+* Enum to be used across code.
+*/
+var Movement = {
+    Direction: {
+        LEFT: "left",
+        RIGHT: "right",
+        UP: "up",
+        DOWN: "down"
+    },
+    Displacement: {
+        alongX: 100,
+        alongY: 81
+    }
+};
+
+var gem_array = [];
+
 /** 
 * Enemies our player must avoid
 */
@@ -21,8 +39,8 @@ var Enemy = function() {
 
 /**
 * Update the enemy's position, required method for game
-*Parameter: dt, a time delta between ticks
-* @param dt
+* Parameter: dt, a time delta between ticks
+* @param {Number} dt Delta
 */
 Enemy.prototype.update = function(dt) {
     /**
@@ -55,94 +73,93 @@ Enemy.prototype.render = function() {
 }
 
 /**
-* Now write your own player class
+* Now write your own player class and set initial default position and sprite.
 */
-
 var Player = function() {
 	this.sprite = "images/char-boy.png";
 	this.x = 200;
 	this.y = 400;
 	
 }
-/**
-* This class requires an update(), render() and
-* a handleInput() method.
-*/
 
+/**
+* Updates player resource.
+*/
 Player.prototype.update = function(dt) {
-    
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+/**
+*this renders the Player.
+*/
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+/**
+* This will make the Player move according to the pressed keys: up, down, right or left.
+*/
 Player.prototype.handleInput = function(allowedKeys) {
 	
-	var Movement = {
-	    Direction: {
-	        LEFT: "left",
-	        RIGHT: "right",
-	        UP: "up",
-	        DOWN: "down"
-	    },
-	    Displacement: {
-	        alongX: 100,
-	        alongY: 83
-	    }
-	};
-	
-	if (this.y >=100 && allowedKeys === Movement.Direction.LEFT) {
-		this.x -= 100;
-	} 
+	if (this.y >= 100 && allowedKeys === Movement.Direction.LEFT) {
+		this.x -= Movement.Displacement.alongX;
+	}  
 
-	if(this.y >= 100 && allowedKeys === Movement.Direction.UP){
-		this.y -= 81;
+	if(this.y >= 100 && allowedKeys === Movement.Direction.UP) {
+		this.y -= Movement.Displacement.alongY;
 	}
-	if(this.x <= 350 && allowedKeys === Movement.Direction.RIGHT){
-		this.x += 100;
+	
+	if(this.x <= 350 && allowedKeys === Movement.Direction.RIGHT) {
+		this.x += Movement.Displacement.alongX;
 	}
-	if(this.y <= 370 && allowedKeys === Movement.Direction.DOWN){
-		this.y += 81;
+	
+	if(this.y <= 370 && allowedKeys === Movement.Direction.DOWN) {
+		this.y += Movement.Displacement.alongY;
 	}
 }
 
-
+/**
+* Draw the gem on the screen, required method for game
+*/
 var Gem = function() {
 	this.sprite = 'images/gem-blue.png';
    	this.randomPosition();
 }
 
+/**
+* this will display the position of the Gem randomly on the canvas
+*/
 Gem.prototype.randomPosition = function() {
-
 	this.x = getRandomInt(1, 5) * 101;
 	this.y = getRandomInt(1, 4) * 73;  
 }
 
-var gem_array = [];
-Gem.prototype.update = function() {
-	/**
-	* checks collisions between Player and Gem
-	*/
+/**
+* Checks collisions between Player and Gem, draw the gems collected after the collision between the
+* Player and the Gems.
+* Then, it will display the Gems above and back to zero, where the Player can collect more, up tp 6 Gems.
+*/
+Gem.prototype.update = function() {		
+	if(player.x >= this.x - 80 && player.x <= this.x + 80 && player.y >= this.y - 80 && player.y <= this.y + 80) {
+			
+		this.randomPosition();
+		if(gem_array.length <= 5){
+			gem_array.push(this.sprite);
+			for(var i = 0; i < gem_array.length; i++){
+				ctx.drawImage(Resources.get('images/gem-orange.png'), i * 33.33, 0);
+					
+			}
+		} else{
+			ctx.clearRect ( 0 , 0, 200, 100);
+			gem_array = [];
 		
-    	if(player.x >= this.x - 80 && player.x <= this.x + 80 && player.y >= this.y - 80 && player.y <= this.y + 80) {
-				
-				this.randomPosition();
-				if(gem_array.length <= 5){
-					gem_array.push(this.sprite);
-					for(var i = 0; i < gem_array.length; i++){
-						ctx.drawImage(Resources.get('images/gem-orange.png'), i * 33.33, 0);
-							
-					}
-				} else{
-					ctx.clearRect ( 0 , 0, 200, 100);
-					gem_array = [];
-				
-				}
-       }   
+		}
+   }   
 }
 
-
+/**
+* This renders the blue gem at x and y.
+*/
 Gem.prototype.render = function() {
 	 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
@@ -180,7 +197,7 @@ for(var i = 0; i < len; i++) {
 
 /**
 * This listens for key presses and sends the keys to your
-*Player.handleInput() method. You don't need to modify this.
+* Player.handleInput() method. You don't need to modify this.
 */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
