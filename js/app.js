@@ -123,14 +123,6 @@ Gem.prototype.render = function(){
 }
 
 
-
-//endGame
-var renderFlag = false;
-function endGame () {
-    renderFlag = false;
-    document.getElementById('pointsSummary').innerHTML = totalPoints;
-    document.getElementById('gameOverPopup').style.display = 'block';
-}
 // Now instantiate your objects.
 
 // Place the player object in a variable called player
