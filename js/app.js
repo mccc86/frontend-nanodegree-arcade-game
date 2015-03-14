@@ -11,6 +11,7 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+	this.speed = Math.floor(Math.random() * 400);
 }
 
 
@@ -20,14 +21,10 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-	//speed = 505 / dt;
-	//Math.random();
-	var randomNumber = Math.floor(Math.random() * 300);
-    this.x += randomNumber * dt; 
+    this.x += this.speed * dt; 
 	if(this.x >= 505){
 		this.x = 0;
     }
-	
 	
 	//Reset player to beginning position and collisions
     if(player.x >= this.x - 50 && player.x <= this.x + 50 
@@ -90,7 +87,7 @@ var Gem = function() {
 Gem.prototype.randomPosition = function(){
 
 	this.x = getRandomInt(1, 5) * 101;
-	this.y = getRandomInt(1, 4) * 83;  
+	this.y = getRandomInt(1, 4) * 73;  
 }
 
 var gem_array = [];
@@ -98,8 +95,8 @@ Gem.prototype.update = function() {
 	//checks collisions between Player and Gem
 	
 		
-    	if(player.x >= this.x - 100 && player.x <= this.x + 100 
-			&& player.y >= this.y - 100 && player.y <= this.y + 100){
+    	if(player.x >= this.x - 80 && player.x <= this.x + 80 
+			&& player.y >= this.y - 80 && player.y <= this.y + 80){
 				
 				this.randomPosition();
 				if(gem_array.length <= 5){
@@ -111,6 +108,7 @@ Gem.prototype.update = function() {
 					}
 				}else{
 					ctx.clearRect ( 0 , 0, 200, 100);
+					gem_array = [];
 				
 				}
 				
@@ -126,6 +124,13 @@ Gem.prototype.render = function(){
 
 
 
+//endGame
+var renderFlag = false;
+function endGame () {
+    renderFlag = false;
+    document.getElementById('pointsSummary').innerHTML = totalPoints;
+    document.getElementById('gameOverPopup').style.display = 'block';
+}
 // Now instantiate your objects.
 
 // Place the player object in a variable called player
@@ -138,7 +143,7 @@ var gem = new Gem();
 
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
-var len = 3;
+var len = 4;
 for(var i = 0; i < len; i++) {
 	var e = new Enemy();
 	e.x = (i + 1) * 70;
