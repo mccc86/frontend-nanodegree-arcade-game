@@ -176,7 +176,8 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-		'images/gem-blue.png'
+		'images/gem-blue.png',
+		'images/gem-orange.png'
     ]);
     Resources.onReady(init);
 
@@ -186,5 +187,6 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 	global.canvas = canvas;
+	
 	
 })(this);

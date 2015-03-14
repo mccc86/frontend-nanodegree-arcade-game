@@ -1,7 +1,7 @@
-ctx.font = "bold 30px sans-serif";
-ctx.textAlign = "center";
-ctx.fillText("Frogger Game", canvas.width / 2, 40);
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -50,13 +50,14 @@ var Player = function(){
 	this.sprite = "images/char-boy.png";
 	this.x = 200;
 	this.y = 400;
+	
 }
 // This class requires an update(), render() and
 // a handleInput() method.
+
 Player.prototype.update = function(dt){
     
 	
-
 }
 
 Player.prototype.render = function() {
@@ -82,24 +83,47 @@ Player.prototype.handleInput = function(allowedKeys){
 
 
 var Gem = function() {
-	 this.sprite = 'images/gem-blue.png';
-	 this.x = Math.random() * 450;
-	 this.y = Math.random() * 390;
-	 
+	this.sprite = 'images/gem-blue.png';
+   	this.randomPosition();
 }
 
+Gem.prototype.randomPosition = function(){
 
+	this.x = getRandomInt(1, 5) * 101;
+	this.y = getRandomInt(1, 4) * 83;  
+}
+
+var gem_array = [];
 Gem.prototype.update = function() {
-    if(player.x >= this.x - 60 && player.x <= this.x + 60 
-		&& player.y >= this.y - 60 && player.y <= this.y + 60){
-	   	 this.x = Math.random() * 450;
-	   	 this.y = Math.random() * 390;   
-       }
+	//checks collisions between Player and Gem
+	
+		
+    	if(player.x >= this.x - 100 && player.x <= this.x + 100 
+			&& player.y >= this.y - 100 && player.y <= this.y + 100){
+				
+				this.randomPosition();
+				if(gem_array.length <= 5){
+					gem_array.push(this.sprite);
+					for(var i = 0; i < gem_array.length; i++){
+							//ctx.fillText(gem_array[i], i * 30, 50);	
+							ctx.drawImage(Resources.get('images/gem-orange.png'), i * 33.33, 0);
+							
+					}
+				}else{
+					ctx.clearRect ( 0 , 0, 200, 100);
+				
+				}
+				
+			
+		
+       }   
 }
+
 
 Gem.prototype.render = function(){
 	 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
+
 
 
 // Now instantiate your objects.
@@ -108,6 +132,9 @@ Gem.prototype.render = function(){
 var player = new Player();
 //gem object
 var gem = new Gem();
+
+
+
 
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
